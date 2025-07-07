@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 export default async function AdminPage() {
   const user = await currentUser();
 
-  if (!user || user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+  if (!user || user.emailAddresses[0].emailAddress !== process.env.ADMIN_EMAIL) {
     return redirect('/');
   }
 
