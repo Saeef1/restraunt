@@ -8,11 +8,6 @@ import Footer from "@/components/ui/footer";
 import GlobalProvider from "./GlobalProvider";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 
 const inter = Inter({

@@ -1,6 +1,5 @@
 "use client";
 import { CartItem, useCart } from "@/context/CartContext";
-import { useEffect } from "react";
 
 type QuantityProps = Omit<CartItem, "quantity">; // everything except quantity
 
