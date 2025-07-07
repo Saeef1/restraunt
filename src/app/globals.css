@@ -3,25 +3,158 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(348, 83%, 47%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 0%, 100%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom BBQ Theme Colors */
+  --deep-red: hsl(0, 100%, 27%);
+  
+  --charcoal: hsl(0, 0%, 10%);
+  --warm-orange: hsl(16, 100%, 60%);
+  --gold: hsl(51, 100%, 50%);
+  --bbq-black: hsl(0, 0%, 0%);
+  --secondary-color:hsl(0, 0%, 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(0, 0%, 100%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  
+
+  body {
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #000;
+    color: #ffffff;
+  }
+
+  .font-bebas {
+    font-family: var(--font-bebas), cursive;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .smoke-effect::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: smoke 3s ease-in-out infinite;
+  }
+
+  .smoke-effect::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 45%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: smoke 3s ease-in-out infinite 0.5s;
+  }
+
+  .hero-bg {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(139,0,0,0.4));
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .glow-effect {
+    box-shadow: 0 0 20px hsl(348, 83%, 47%), 0 0 40px hsl(348, 83%, 47%), 0 0 60px hsl(348, 83%, 47%);
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@keyframes smoke {
+  0% { 
+    transform: translateY(0px) scale(1);
+    opacity: 0.8;
   }
+  50% { 
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.5;
+  }
+  100% { 
+    transform: translateY(-40px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  0% { 
+    box-shadow: 0 0 5px hsl(348, 83%, 47%), 0 0 10px hsl(348, 83%, 47%), 0 0 15px hsl(348, 83%, 47%);
+  }
+  100% { 
+    box-shadow: 0 0 10px hsl(348, 83%, 47%), 0 0 20px hsl(348, 83%, 47%), 0 0 30px hsl(348, 83%, 47%);
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-10px);
+  }
+}
+
+.animate-smoke {
+  animation: smoke 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
