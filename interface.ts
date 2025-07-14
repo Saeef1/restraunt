@@ -1,12 +1,12 @@
 import { StaticImageData } from "next/image";
 export interface MenuItem {
-    id: string;
+    _id: string;
     name: string;
     description: string;
     price: number;
     image: string | StaticImageData;
     special: boolean;
-    catagory: string[];
+    category: string[];
     quantity: number;
 }
 

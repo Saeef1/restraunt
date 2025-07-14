@@ -57,6 +57,20 @@
   --radius: 0.5rem;
 }
 
+input,textarea{
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+}
+
+label{
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
 @layer base {
   
 

@@ -9,11 +9,9 @@ const Home = () => {
      <div>
       <Hero1/>
       <main id="menu" className="bg-black text-white min-h-screen">
-      <Menu Title="DEALS"/>
+      <Menu Title="Promotional Deal"/>
       <Menu Title="BBQ"/>
-      <Menu Title="Fast Food"/>
-      <Menu Title="Chowmien"/>
-      <Menu Title="Pizza"/>
+      <Menu Title="Fast Food"/>      
       </main>
     </div> 
     </>

@@ -1,18 +1,26 @@
-import React from "react";
+  "use client"
 import Image from "next/image";
-import menuItems from "@/Data/menu";
 import { MenuItem } from "@/../interface";
 import Quantity from "./quantity";
+import axios from "axios";
+import React,{ useEffect, useState } from "react";
 
 const MenuCard = ({ Catagory }: { Catagory: string }) => {
+  const [product, setProduct] = useState<MenuItem[]>([]);
+  
+  useEffect(() => {
+      axios.get("/api/product").then((response) => {
+        setProduct(response.data);
+      });
+    }, []);
 
   return (
     <>
-      {menuItems
-        .filter((item: MenuItem) => item.catagory.includes(Catagory))
+      {product
+        .filter((item: MenuItem) => item.category.includes(Catagory))
         .map((item: MenuItem) => (
           <div
-            key={item.id}
+            key={item._id}
             className= "bg-gray-900/50 text-center backdrop-blur-sm border border-red-900/30 rounded-md p-6 hover:border-[crimson]/60 transition-all duration-300 group"
           >
             <div className="relative mb-4 smoke-effect">
@@ -37,13 +45,13 @@ const MenuCard = ({ Catagory }: { Catagory: string }) => {
               </span>
               <i className={` text-white-600`}>
                 <Quantity
-                  id={item.id}
+                  id={item._id}
                   name={item.name}
                   description={item.description}
                   price={item.price}
                   image={item.image}
                   special={item.special}
-                  catagory={item.catagory}
+                  category={item.category}
                 />
               </i>
             </div>
