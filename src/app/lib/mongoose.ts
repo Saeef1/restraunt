@@ -1,4 +1,3 @@
-// /app/lib/mongoose.ts
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -7,11 +6,22 @@ if (!MONGODB_URI) {
   throw new Error("❌ Please define MONGODB_URI in .env.local");
 }
 
-// ✅ Singleton cache object
-const mongooseCache = {
-  conn: null as typeof mongoose | null,
-  promise: null as Promise<typeof mongoose> | null,
+// ✅ Extend globalThis for Vercel/hot-reload cache
+const globalWithMongoose = globalThis as typeof globalThis & {
+  mongooseCache?: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
 };
+
+if (!globalWithMongoose.mongooseCache) {
+  globalWithMongoose.mongooseCache = {
+    conn: null,
+    promise: null,
+  };
+}
+
+const mongooseCache = globalWithMongoose.mongooseCache;
 
 export const connectDB = async () => {
   if (mongooseCache.conn) {
@@ -22,7 +32,6 @@ export const connectDB = async () => {
     const opts = {
       bufferCommands: false,
     };
-
     mongooseCache.promise = mongoose.connect(MONGODB_URI, opts);
   }
 
