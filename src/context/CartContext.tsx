@@ -12,7 +12,7 @@ import { StaticImageData } from "next/image";
 
 /* 1. Types                                                            */
 export type CartItem = {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -25,11 +25,11 @@ export type CartItem = {
 type CartContextType = {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
-  changeQuantity: (id: string, delta: number) => void; // delta = +1 / ‑1
-  removeFromCart: (id: string) => void;
+  changeQuantity: (_id: string, delta: number) => void; // delta = +1 / ‑1
+  removeFromCart: (_id: string) => void;
   clearCart: () => void;
   /** helper: how many of this id are currently in the cart? */
-  getItemQuantity: (id: string) => number;
+  getItemQuantity: (_id: string) => number;
 };
 
 /* ------------------------------------------------------------------ */
@@ -42,25 +42,37 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   /* ---- Restore from localStorage ---------------------------------- */
   useEffect(() => {
-    // console.log("CartProvider: Loading from localStorage...");
+    console.log("CartProvider: Loading from localStorage...");
     const stored = localStorage.getItem("cartItems");
     if (stored) {
       try {
-        setCartItems(JSON.parse(stored));
-      } catch {
+        const parsed = JSON.parse(stored);
+        console.log("CartProvider: Loaded from localStorage:", parsed);
+        setCartItems(parsed);
+      } catch (error) {
+        console.error("CartProvider: Error parsing localStorage:", error);
         localStorage.removeItem("cartItems"); // corrupted data → reset
       }
+    } else {
+      console.log("CartProvider: No stored cart data found");
     }
   }, []);
 
   /* ---- Persist to localStorage ------------------------------------ */
   useEffect(() => {
-    // Strip StaticImageData objects down to just `src` before saving
-    const serialisable = cartItems.map((i) => ({
-      ...i,
-      image: typeof i.image === "string" ? i.image : i.image.src,
-    }));
-    localStorage.setItem("cartItems", JSON.stringify(serialisable));
+    console.log("CartProvider: Saving to localStorage:", cartItems);
+    if (cartItems.length > 0) {
+      // Strip StaticImageData objects down to just `src` before saving
+      const serialisable = cartItems.map((i) => ({
+        ...i,
+        image: typeof i.image === "string" ? i.image : i.image.src,
+      }));
+      localStorage.setItem("cartItems", JSON.stringify(serialisable));
+      console.log("CartProvider: Saved to localStorage:", serialisable);
+    } else {
+      localStorage.removeItem("cartItems");
+      console.log("CartProvider: Removed from localStorage (empty cart)");
+    }
   }, [cartItems]);
 
   /* ---- Actions ---------------------------------------------------- */
@@ -68,10 +80,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (item.quantity <= 0) return;
 
     setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
+      const existing = prev.find((i) => i._id === item._id);
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id
+          i._id === item._id
             ? { ...i, quantity: i.quantity + item.quantity }
             : i
         );
@@ -81,14 +93,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
  const changeQuantity = useCallback(
-  (id: string, delta: number, fallback?: CartItem) => {
+  (_id: string, delta: number, fallback?: CartItem) => {
     setCartItems(prev => {
-      const existing = prev.find(i => i.id === id);
+      const existing = prev.find(i => i._id === _id);
 
       if (existing) {
         return prev
           .map(i =>
-            i.id === id
+            i._id === _id
               ? { ...i, quantity: Math.max(0, i.quantity + delta) }
               : i
           )
@@ -105,15 +117,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   []
 );
 
-  const removeFromCart = useCallback((id: string) => {
-    setCartItems((prev) => prev.filter((i) => i.id !== id));
+  const removeFromCart = useCallback((_id: string) => {
+    setCartItems((prev) => prev.filter((i) => i._id !== _id));
   }, []);
 
   const clearCart = useCallback(() => setCartItems([]), []);
 
   const getItemQuantity = useCallback(
-    (id: string) => {
-      const quantity = cartItems.find((i) => i.id === id)?.quantity ?? 0;
+    (_id: string) => {
+      const quantity = cartItems.find((i) => i._id === _id)?.quantity ?? 0;
       // console.log(`CartProvider: Getting quantity for ${id}:`, quantity);
       return quantity;
     },

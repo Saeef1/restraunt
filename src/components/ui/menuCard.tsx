@@ -5,7 +5,7 @@ import Quantity from "./quantity";
 import axios from "axios";
 import React,{ useEffect, useState } from "react";
 
-const MenuCard = ({ Catagory }: { Catagory: string }) => {
+const MenuCard = ({ Category }: { Category: string }) => {
   const [product, setProduct] = useState<MenuItem[]>([]);
   
   useEffect(() => {
@@ -17,7 +17,7 @@ const MenuCard = ({ Catagory }: { Catagory: string }) => {
   return (
     <>
       {product
-        .filter((item: MenuItem) => item.category.includes(Catagory))
+        .filter((item: MenuItem) => item.category.includes(Category))
         .map((item: MenuItem) => (
           <div
             key={item._id}
@@ -45,7 +45,7 @@ const MenuCard = ({ Catagory }: { Catagory: string }) => {
               </span>
               <i className={` text-white-600`}>
                 <Quantity
-                  id={item._id}
+                  _id={item._id}
                   name={item.name}
                   description={item.description}
                   price={item.price}

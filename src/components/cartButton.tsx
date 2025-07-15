@@ -14,7 +14,7 @@ const CartButton = () => {
     <>
       <Link href="/Cart" className='fixed bottom-3 right-3 m-4 p-2 bg-[crimson] text-white rounded-full shadow-lg hover:bg-red-700 transition-colors duration-300 '>
         <div className="flex items-center justify-center">
-          <ShoppingCart size={34} />
+          <ShoppingCart size={24} />
         </div>
         
         {/* Cart Count Badge */}

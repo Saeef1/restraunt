@@ -14,7 +14,7 @@ export default function Menu({ Title }: { Title: string }) {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 ">
-              <MenuCard Catagory={Title} />
+              <MenuCard Category={Title} />
             </div>
           </div>
         </section>
