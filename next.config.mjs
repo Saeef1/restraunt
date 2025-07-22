@@ -1,7 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    images: {
-    domains: ['www.google.com', 'www.escoffieronline.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.escoffieronline.com',
+      },
+    ],
   },
 };
 

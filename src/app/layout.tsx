@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from 'react-hot-toast';
 import CartButton from "@/components/cartButton";
 import { Inter, Baloo_Bhaijaan_2 } from "next/font/google";
 import Navigation from "@/components/ui/Navigation";
@@ -50,6 +51,7 @@ export default function RootLayout({
         >
           <GlobalProvider>
             <Navigation />
+            <Toaster position="top-center"/>
             {children}
             <CartButton />
             <Footer />

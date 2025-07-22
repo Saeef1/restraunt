@@ -1,7 +1,6 @@
 import React from 'react'
 import Hero1 from '@/components/hero1'
-import Menu from '@/components/Section'
-
+import Main from '@/components/main'
 
 const Home = () => {
   return (
@@ -9,10 +8,7 @@ const Home = () => {
      <div>
       <Hero1/>
       <main id="menu" className="bg-black text-white min-h-screen">
-      <Menu Title="Pizza DEALS"/>  
-      <Menu Title="Promotional Deal"/>
-      <Menu Title="BBQ"/>
-      <Menu Title="Fast Food"/>      
+        <Main />        
       </main>
     </div> 
     </>

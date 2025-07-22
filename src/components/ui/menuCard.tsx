@@ -1,23 +1,16 @@
-  "use client"
+"use client";
 import Image from "next/image";
 import { MenuItem } from "@/../interface";
 import Quantity from "./quantity";
-import axios from "axios";
-import React,{ useEffect, useState } from "react";
+import  product  from "@/Data/menu";
+import React from "react";
 
 const MenuCard = ({ Category }: { Category: string }) => {
-  const [product, setProduct] = useState<MenuItem[]>([]);
-  
-  useEffect(() => {
-      axios.get("/api/product").then((response) => {
-        setProduct(response.data);
-      });
-    }, []);
+ 
 
   return (
     <>
-      {product
-        .filter((item: MenuItem) => item.category.includes(Category))
+      {(product()?.filter((item: MenuItem) => item.category.includes(Category)) || [])
         .map((item: MenuItem) => (
           <div
             key={item._id}
