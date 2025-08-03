@@ -1,10 +1,20 @@
-"use client"
 import React from "react";
 import Layout from "../Layout";
 import Link from "next/link";
 import AllProducts from "./allProducts";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const ProductsPage =() => {
+const ProductsPage =async () => {
+    const user = await currentUser();
+  
+    if (
+      !user ||
+      user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL
+    ) {
+      return redirect("/");
+    }
+  
   return (
     <Layout>
       <div className="flex justify-between items-center mb-6">

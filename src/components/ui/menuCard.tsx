@@ -2,53 +2,65 @@
 import Image from "next/image";
 import { MenuItem } from "@/../interface";
 import Quantity from "./quantity";
-import  product  from "@/Data/menu";
+import  useMenu  from "@/Data/menu";
 import React from "react";
 
 const MenuCard = ({ Category }: { Category: string }) => {
- 
+  const product = useMenu();
+
+  const filtered = product.filter((item) => item.category.includes(Category)) || [];
 
   return (
     <>
-      {(product()?.filter((item: MenuItem) => item.category.includes(Category)) || [])
-        .map((item: MenuItem) => (
-          <div
-            key={item._id}
-            className= "bg-gray-900/50 text-center backdrop-blur-sm border border-red-900/30 rounded-md p-6 hover:border-[crimson]/60 transition-all duration-300 group"
-          >
-            <div className="relative mb-4 smoke-effect">
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={800}
-                height={600}
-                className="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
-              />
-              {item.special && (
-                <div className="absolute top-2 right-2 bg-[crimson] text-white px-2 py-1 rounded text-sm font-bebas">
-                  SPECIAL
-                </div>
-              )}
-            </div>
-            <h3 className="font-bebas text-2xl text-white mb-2">{item.name}</h3>
-            <p className="text-gray-400 mb-4">{item.description}</p>
-            <div className="flex  justify-between items-center">
-              <span className="text-[gold] font-bebas text-xl">
-                RS. {item.price}/-
-              </span>
-              <i className={` text-white-600`}>
-                <Quantity
-                  _id={item._id}
-                  name={item.name}
-                  description={item.description}
-                  price={item.price}
-                  image={item.image}
-                  special={item.special}
-                  category={item.category}
-                />
-              </i>
-            </div>
-          </div>
+      {filtered.map((item: MenuItem) => (
+<div
+  key={item._id}
+  className="max-w-sm w-full mx-auto bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-md hover:shadow-crimson/40 transition-all duration-300 group"
+>
+  {/* Image with Hover Zoom */}
+  <div className="relative w-full aspect-[4/3] overflow-hidden">
+    <Image
+      src={item.image}
+      alt={item.name}
+      fill
+      className="object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+    
+    {/* Price Badge - visible always */}
+    <div className="absolute bottom-3 left-3 bg-black/70 text-gold text-sm px-3 py-1 rounded-full font-bebas shadow">
+      Rs. {item.price}/-
+    </div>
+
+    {/* Special Tag */}
+    {item.special && (
+      <span className="absolute top-3 right-3 bg-crimson text-white text-xs font-bold px-2 py-1 rounded-full shadow">
+        SPECIAL
+      </span>
+    )}
+  </div>
+
+  {/* Content */}
+  <div className="p-4 text-white space-y-2">
+    <h3 className="text-xl font-bebas tracking-wide">{item.name}</h3>
+    <p className="text-sm text-gray-300 line-clamp-2">{item.description}</p>
+  </div>
+
+  {/* Quantity Button */}
+  <div className="px-4 pb-4">
+    <div className="flex justify-end">
+      <Quantity
+        _id={item._id}
+        name={item.name}
+        description={item.description}
+        price={item.price}
+        image={item.image}
+        special={item.special}
+        category={item.category}
+      />
+    </div>
+  </div>
+</div>
+
         ))}
     </>
   );

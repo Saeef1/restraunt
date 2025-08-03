@@ -12,7 +12,7 @@ const Form = () => {
   const [price, setPrice] = useState<number>(0);
   const [special, setSpecial] = useState(false);
   const [category, setCategory] = useState<string[]>([]);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [selectedFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
 
@@ -31,7 +31,7 @@ const Form = () => {
 
   async function createProduct(ev: { preventDefault: () => void; }) {
     ev.preventDefault();
-    if (!name || !description || !price || !category.length || !imageFile) {
+    if (!name || !description || !price || !category.length || !selectedFile) {
       alert("Please fill all fields and select an image");
       return;
     }
@@ -46,7 +46,7 @@ const Form = () => {
       formData.append('price', price.toString());
       formData.append('special', special.toString());
       formData.append('category', JSON.stringify(category));
-      formData.append('image', imageFile);
+      formData.append('image', selectedFile);
 
       await axios.post("/api/product", formData, {
         headers: {
@@ -167,7 +167,7 @@ const Form = () => {
       <button
         type="submit"
         className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        disabled={!name || !description || !price || !category.length || !imageFile || isUploading}
+        disabled={!name || !description || !price || !category.length || !selectedFile || isUploading}
       >
         {isUploading ? "Creating Product..." : "Add Product"}
       </button>

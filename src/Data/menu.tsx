@@ -5,15 +5,16 @@ import { MenuItem } from "../../interface";
 import { OrderType } from "../../interface";
 
 export default function useMenu() {
-const [product, setProduct] = useState<MenuItem[]>();
-  
-useEffect(() => {
-       axios.get("/api/product").then((response) => {
-        setProduct(response.data);
-      });
-    }, []);
-  return  product ;
-  }
+  const [product, setProduct] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    axios.get("/api/product").then((response) => {
+      setProduct(response.data);
+    });
+  }, []);
+
+  return product;
+}
 
 export function useOrder() {
  const [orders, setOrders] = useState<OrderType[]>([]);

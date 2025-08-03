@@ -1,12 +1,17 @@
 import { connectDB } from "@/app/lib/mongoose";
 import Item from "@/app/modules/item";
 import { NextRequest, NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import fs from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 
-// 📦 POST - Create a new item with image upload
+// Cloudinary Config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
+
+// 📦 POST - Create new product
 export async function POST(req: NextRequest) {
   await connectDB();
 
@@ -20,58 +25,46 @@ export async function POST(req: NextRequest) {
     const category = JSON.parse(formData.get("category") as string);
     const imageFile = formData.get("image") as File;
 
-    // Validate required fields
-    if (!name || !description || isNaN(price) || !category || !imageFile) {
+    if (!imageFile) {
       return NextResponse.json(
-        { error: "All fields are required" },
+        { error: "Image file is required" },
         { status: 400 }
       );
     }
 
-    // Validate image file type
-    if (!imageFile.type.startsWith("image/")) {
-      return NextResponse.json(
-        { error: "Only image files are allowed" },
-        { status: 400 }
-      );
-    }
+    // 🧪 Debug logs (remove later)
+    console.log("🔍 Form Data:", {
+      name,
+      description,
+      price,
+      special,
+      category,
+    });
+    console.log(
+      "📸 imageFile:",
+      imageFile.name,
+      imageFile.type,
+      imageFile.size
+    );
 
-    // Validate category format
-    if (!Array.isArray(category)) {
-      return NextResponse.json(
-        { error: "Invalid category format" },
-        { status: 400 }
-      );
-    }
+    // Convert image to base64
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    const base64 = buffer.toString("base64");
+    const dataUri = `data:${imageFile.type};base64,${base64}`;
+    
+    const uploadRes = await cloudinary.uploader.upload(dataUri, {
+      folder: "restaurant-products",
+    });
+    const imageUrl = uploadRes.secure_url;
 
-    // Convert image to buffer
-    const bytes = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Sanitize and generate unique filename
-    const timestamp = Date.now();
-    const originalName = imageFile.name;
-    const safeName = originalName.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${safeName}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-
-    // Ensure uploads directory exists
-    if (!fs.existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    const filepath = path.join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-
-    // Save to database
-    const imagePath = `/uploads/${filename}`;
+    // ✅ Save to MongoDB
     const itemDoc = await Item.create({
       name,
       description,
       price,
       special,
       category,
-      image: imagePath,
+      image: imageUrl,
     });
 
     return NextResponse.json(itemDoc, { status: 201 });
@@ -84,7 +77,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// 📦 GET - Fetch all items (with cache headers)
+// 📦 GET - Get all products
 export async function GET() {
   await connectDB();
 
@@ -109,7 +102,7 @@ export async function GET() {
   }
 }
 
-// 📦 DELETE - Remove item by ID
+// 📦 DELETE - Delete by ID
 export async function DELETE(req: NextRequest) {
   await connectDB();
 
@@ -117,7 +110,7 @@ export async function DELETE(req: NextRequest) {
   const id = searchParams.get("_id");
 
   if (!id) {
-    return NextResponse.json({ error: "Missing _id parameter" }, { status: 400 });
+    return NextResponse.json({ error: "Missing _id" }, { status: 400 });
   }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -126,9 +119,12 @@ export async function DELETE(req: NextRequest) {
 
   try {
     await Item.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Item deleted successfully" }, { status: 200 });
+    return NextResponse.json({ message: "Item deleted" }, { status: 200 });
   } catch (error) {
     console.error("❌ Error deleting item:", error);
-    return NextResponse.json({ error: "Failed to delete item" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to delete item" },
+      { status: 500 }
+    );
   }
 }

@@ -38,8 +38,7 @@ const Cart = () => {
     );
   }
 
-  return (
-    <>
+  return <>
       <div className=" h-[calc(100vh-6rem)] lg:flex-row md:h-[calc(100vh-6rem)] flex flex-col items-center text-white">
         <div className=" h-1/2 p-4 flex flex-col justify-center overflow-scroll md:h-full md:mt-7 lg:w-2/3 lg:px-10 xl:px-40">
           {cartItems.map((item) => (
@@ -135,7 +134,6 @@ const Cart = () => {
         </div>
       </div>
     </>
-  );
 };
 
 export default Cart;

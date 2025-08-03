@@ -1,7 +1,17 @@
 import React from "react";
 import Layout from "@/app/Admin/Layout";
 import Form from "./form";
-const page = () => {
+import { redirect } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
+const page =async () => {
+    const user = await currentUser();
+  
+    if (
+      !user ||
+      user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL
+    ) {
+      return redirect("/");
+    }
   
   return (
     <Layout>
