@@ -35,7 +35,7 @@ export default function Navigation() {
   const isAdmin =
     isSignedIn &&
     user?.primaryEmailAddress?.emailAddress ===
-      process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+      process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-md border-b mb-2 border-red-900/30">
