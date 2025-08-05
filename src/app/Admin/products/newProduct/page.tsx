@@ -8,7 +8,7 @@ const page =async () => {
   
     if (
       !user ||
-      user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL
+      user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL
     ) {
       return redirect("/");
     }
