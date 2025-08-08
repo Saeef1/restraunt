@@ -7,9 +7,7 @@ import { Inter, Baloo_Bhaijaan_2 } from "next/font/google";
 import Navigation from "@/components/ui/Navigation";
 import Footer from "@/components/ui/footer";
 import GlobalProvider from "./GlobalProvider";
-import {
-  ClerkProvider,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],

@@ -1,18 +1,20 @@
+"use client";
 import React from "react";
 import Layout from "@/app/Admin/Layout";
 import Form from "./form";
 import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
-const page =async () => {
-    const user = await currentUser();
+import { useUser } from "@clerk/nextjs";
+const page = () => {
   
-    if (
-      !user ||
-      user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL
-    ) {
-      return redirect("/");
-    }
-  
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) return null; // or loading spinner
+
+  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+
+  if (!user || user.primaryEmailAddress?.emailAddress !== adminEmail) {
+    redirect("/");
+  }
   return (
     <Layout>
       <div className="flex flex-col gap-2">

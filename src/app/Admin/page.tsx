@@ -1,16 +1,21 @@
-import { currentUser } from "@clerk/nextjs/server";
+"use client";
 import { redirect } from "next/navigation";
 import Layout from "@/app/Admin/Layout";
 import { User, Mail, Calendar, Shield } from "lucide-react";
 import Link from "next/link";
-export default async function AdminPage() {
-  const user = await currentUser();
+import { useUser } from "@clerk/nextjs";
+import { EmailAddressResource } from "@clerk/types";
 
-  if (
-    !user ||
-    user.emailAddresses[0].emailAddress !== process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL
-  ) {
-    return redirect("/");
+export default function AdminPage() {
+
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) return null; // or loading spinner
+
+  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+
+  if (!user || user.primaryEmailAddress?.emailAddress !== adminEmail) {
+    redirect("/");
   }
 
   return (
@@ -45,7 +50,9 @@ export default async function AdminPage() {
               <Mail className="h-5 w-5 text-gray-400" />
               <div>
                 <p className="text-sm font-medium text-gray-900">Email</p>
-                <p className="text-sm text-gray-600">{user.emailAddresses[0].emailAddress}</p>
+                <p className="text-sm text-gray-600">
+                  {user.emailAddresses.map((emailObj: EmailAddressResource) => emailObj.emailAddress).join(", ")}
+                </p>
               </div>
             </div>
             
