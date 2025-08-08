@@ -1,25 +1,22 @@
-"use client";
 import React from "react";
 import Layout from "@/app/Admin/Layout";
 import Form from "./form";
 import { redirect } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-const page = () => {
-  
-  const { user, isLoaded } = useUser();
+import { currentUser } from "@clerk/nextjs/server";
 
-  if (!isLoaded) return null; // or loading spinner
-
-  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+const page = async () => {
+  const user = await currentUser();
+  const adminEmail = process.env.ADMIN_EMAIL; // keep it server-only
 
   if (!user || user.primaryEmailAddress?.emailAddress !== adminEmail) {
     redirect("/");
   }
+
   return (
     <Layout>
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold" >Add New Product</h1>
-        <Form/>
+        <h1 className="text-2xl font-bold">Add New Product</h1>
+        <Form />
       </div>
     </Layout>
   );
