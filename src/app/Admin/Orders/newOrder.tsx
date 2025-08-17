@@ -46,7 +46,7 @@ const NewOrder = () => {
       setUpdatingStatus(orderId);
       await axios.patch(`/api/order/${orderId}`, { status: newStatus });
       await refetch(); // Refresh the orders list
-      alert(`Order status updated to ${newStatus}`);
+      toast.success(`Order status updated to ${newStatus}`);
     } catch (error) {
       console.error("Failed to update order status:", error);
       toast.error("Failed to update order status. Please try again.");
@@ -57,7 +57,7 @@ const NewOrder = () => {
 
   // Delete order
   const handleDeleteOrder = async (orderId: string) => {
-    if (!confirm("Are you sure you want to delete this order?")) {
+    if (!toast.arguments("Are you sure you want to delete this order?")) {
       return;
     }
 

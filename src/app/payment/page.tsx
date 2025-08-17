@@ -207,7 +207,8 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-3 lg:w-1/3 border border-gray-300">
+        <div className="p-4 bg-white rounded-lg justify-between shadow-md flex flex-col gap-3 lg:w-1/3 border border-gray-300">
+          <div className="flex flex-col gap-5">
           <div className="flex justify-between">
             <span>Subtotal ({totalItems} items)</span>
             <span>Rs{subtotal.toFixed(2)}</span>
@@ -221,6 +222,7 @@ export default function Home() {
             <span className={deliveryCost === 0 ? "text-green-500" : ""}>
               {deliveryCost === 0 ? "FREE!" : `Rs${deliveryCost.toFixed(2)}`}
             </span>
+          </div>
           </div>
           <hr />
           <div className="flex justify-between font-semibold text-lg">
