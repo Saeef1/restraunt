@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const formData = await req.formData();
-
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = Number(formData.get("price"));

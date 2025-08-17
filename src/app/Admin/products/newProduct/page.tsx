@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 const page = async () => {
   const user = await currentUser();
-  const adminEmail = process.env.ADMIN_EMAIL; // keep it server-only
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAIL // keep it server-only
 
   if (!user || user.primaryEmailAddress?.emailAddress !== adminEmail) {
     redirect("/");

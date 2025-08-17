@@ -4,7 +4,8 @@ import Link from "next/link";
 import { ListOrdered, ShoppingBag, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 const Nav = () => {
-  
+  console.log("Admin email from env:", JSON.stringify(process.env.ADMIN_EMAIL));
+
   const inactiveLink = "flex gap-2 item-center hover:text-gray-300";
   const activeLink =
     inactiveLink +
