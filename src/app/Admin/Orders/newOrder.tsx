@@ -57,7 +57,7 @@ const NewOrder = () => {
 
   // Delete order
   const handleDeleteOrder = async (orderId: string) => {
-    if (!toast.arguments("Are you sure you want to delete this order?")) {
+    if (!confirm("Are you sure you want to delete this order?")) {
       return;
     }
 
